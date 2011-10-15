@@ -1,0 +1,16 @@
+.slideshow {}
+
+.slideshow ul {
+	margin: 0;
+	padding: 0;
+}
+
+.slideshow li {
+	margin: 0;
+	padding: 0;
+	display: block;
+}
+
+.slideshow img {
+	display: block;
+}

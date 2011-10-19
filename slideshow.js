@@ -6,6 +6,7 @@
 		_currentSlide: null,
 		_currentIndex: 0,
 		_slides: null,
+		length: 0,
 		element: null,
 		options: {},
 		init: function(el, opts) {
@@ -26,6 +27,8 @@
 				vpH = Math.max(vpH, el.height);
 			});
 			
+			this.length = this._slides.length;
+			
 			// Build the UI
 			self._addViewport(vpW, vpH);
 			self._addPrevNext();
@@ -42,19 +45,21 @@
 					self.prevSlide();
 				})
 				.bind('showSlide', function(ev, idx) {
-					console.log("Show Slide ", idx);  // TODO: Remove for Production
 					self.showSlide(idx);
 				})
 				.delegate('.prev', 'click', function(ev) {
+					ev.preventDefault();
 					console.log("Clicked Prev");  // TODO: Remove for Production
 					$(this).trigger('prevSlide');
 				})
 				.delegate('.next', 'click', function(ev) {
+					ev.preventDefault();
 					console.log("Clicked Next");  // TODO: Remove for Production
 					$(this).trigger('nextSlide');
 				})
-				.delegate('.nav a', 'click', function(ev) {
+				.delegate('.slideshow-nav a', 'click', function(ev) {
 					console.log("Clicked Nav link");  // TODO: Remove for Production
+					ev.preventDefault();
 					var
 						$parent = $(this).parent(),
 						$navs = $parent.siblings('li').andSelf()
@@ -102,12 +107,23 @@
 			$root.append('<div class="slideshow-controls"><a class="prev" href="#">Prev</a><a class="next" href="#">Next</a></div>');
 		},
 		_getSlideIndex: function() {},
-		nextSlide: function() {},
-		prevSlide: function() {},
-		showSlide: function(idx) {
+		nextSlide: function() {
 			var
-				self = this
+				next = this._currentIndex + 1;
 			;
+			if(next < this.length) this.showSlide(next);
+		},
+		prevSlide: function() {
+			var
+				prev = this._currentIndex - 1;
+			;
+			if(prev >= 0) this.showSlide(prev);
+		},
+		showSlide: function(idx) {
+			var self = this;
+			$(self._currentSlide).hide();
+			self._currentSlide = self._slides.eq(idx).show();
+			self._currentIndex = idx;
 		},
 		_transitions: {
 			crossfade: function(slide1, slide2) {},

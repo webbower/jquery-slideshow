@@ -14,3 +14,11 @@
 .slideshow img {
 	display: block;
 }
+
+.slideshow-controls .disabled {
+	color: #999;
+}
+
+.slideshow-nav .current {
+	color: orange;
+}

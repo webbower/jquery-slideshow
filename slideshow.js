@@ -4,8 +4,11 @@
 
 	$.extend(Slideshow, {
 		_currentSlide: null,
-		_currentIndex: 0,
+		_currentIndex: null,
 		_slides: null,
+		_nav: null,
+		_prev: null,
+		_next: null,
 		length: 0,
 		element: null,
 		options: {},
@@ -36,26 +39,35 @@
 			self._addPrevNext();
 			self._addIndexNav();
 
+			// References to the controls
+			this._nav = root.find('.slideshow-nav a');
+			this._prev = root.find('.prev');
+			this._next = root.find('.next');
+
 			// Hook up all the functionality
 			root
-				.bind('nextSlide', function(ev) {
-					console.log("Show Next Slide");  // TODO: Remove for Production
-					self.nextSlide();
-				})
 				.bind('prevSlide', function(ev) {
-					console.log("Show Prev Slide");  // TODO: Remove for Production
 					self.prevSlide();
+				})
+				.bind('nextSlide', function(ev) {
+					self.nextSlide();
 				})
 				.bind('showSlide', function(ev, idx) {
 					self.showSlide(idx);
 				})
 				.delegate('.prev', 'click', function(ev) {
 					ev.preventDefault();
-					$(this).trigger('prevSlide');
+					var $el = $(this);
+					if(!$el.hasClass('disabled')) {
+						$el.trigger('prevSlide');
+					}
 				})
 				.delegate('.next', 'click', function(ev) {
 					ev.preventDefault();
-					$(this).trigger('nextSlide');
+					var $el = $(this);
+					if(!$el.hasClass('disabled')) {
+						$el.trigger('nextSlide');
+					}
 				})
 				.delegate('.slideshow-nav a', 'click', function(ev) {
 					ev.preventDefault();
@@ -66,7 +78,7 @@
 
 					$parent.trigger('showSlide', $navs.index($parent));
 				})
-				.trigger('showSlide', self._currentIndex)
+				.trigger('showSlide', 0)
 				.addClass('slideshow-active')
 			;
 			
@@ -112,9 +124,24 @@
 			if(prev >= 0) this.showSlide(prev);
 		},
 		showSlide: function(idx) {
-			$(this._currentSlide).hide();
-			this._currentSlide = this._slides.eq(idx).show();
-			this._currentIndex = idx;
+			// If we're trying to show a new slide...
+			if(idx !== this._currentIndex) {
+				// Hide the current slide
+				$(this._currentSlide).hide();
+				// Show the new slide and store the current reference to it
+				this._currentSlide = this._slides.eq(idx).show();
+				// Update the current index
+				this._currentIndex = idx;
+				
+				// Update the navigation and controls
+				this._prev[this._currentIndex === 0 ? 'addClass' : 'removeClass']('disabled');
+				this._next[this._currentIndex === (this.length - 1) ? 'addClass' : 'removeClass']('disabled');
+				
+				this._nav
+					.filter('.current').removeClass('current')
+					.end().eq(this._currentIndex).addClass('current')
+				;
+			}
 		},
 		_transitions: {
 			crossfade: function(slide1, slide2) {},

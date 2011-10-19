@@ -11,15 +11,20 @@
 		_next: null,
 		length: 0,
 		element: null,
-		options: {},
+		options: {
+			slideSelector: 'li',
+			transition: 'toggle',
+			navStyle: 'numbers', // "thumbnails" or "numbers"
+			currentClass: 'current',
+			disabledClass: 'disabled'
+		},
 		init: function(el, opts) {
 			this.element = el;
-			$.extend(this.options, opts);
 
 			var
 				self = this,
 				root = $(self.element),
-				o = self.options,
+				o = $.extend(this.options, opts, root.data()),
 				vpW = vpH = 0
 			;
 
@@ -161,12 +166,12 @@
 				this._currentIndex = idx;
 				
 				// Update the navigation and controls
-				this._prev[nextIndex === 0 ? 'addClass' : 'removeClass']('disabled');
-				this._next[nextIndex === (this.length - 1) ? 'addClass' : 'removeClass']('disabled');
+				this._prev[nextIndex === 0 ? 'addClass' : 'removeClass'](this.options.disabledClass);
+				this._next[nextIndex === (this.length - 1) ? 'addClass' : 'removeClass'](this.options.disabledClass);
 				
 				this._nav
-					.filter('.current').removeClass('current')
-					.end().eq(nextIndex).addClass('current')
+					.filter('.current').removeClass(this.options.currentClass)
+					.end().eq(nextIndex).addClass(this.options.currentClass)
 				;
 			}
 		},
@@ -214,11 +219,6 @@
 
 	$.fn.extend({
 		slideshow: function(opts) {
-			opts = $.extend({
-				slideSelector: 'li',
-				transition: 'slidevert',
-				navStyle: 'thumbnails' // "thumbnails" or "numbers"
-			}, opts);
 			return this.each(function(i, el) {
 				Slideshow.init(el, opts);
 			});
@@ -228,6 +228,8 @@
     $(function() {
         $(document.documentElement).removeClass('no-js').addClass('js');
 
-		$('.slideshow').slideshow();
+		$('.slideshow').slideshow({
+			transition: 'slidevert'
+		});
     });
 })(jQuery);

@@ -130,9 +130,10 @@
 					currSlide = this._currentSlide,
 					nextSlide = this._slides.eq(idx),
 					currIndex = this._currentIndex,
-					nextIndex = idx
+					nextIndex = idx,
+					transitionFunc = (typeof this.options.transition === 'string' ? this._transitions[this.options.transition] : this.options.transition)
 				;
-				this._transitions[this.options.transition].call(this, currSlide, nextSlide);
+				transitionFunc.call(this, currSlide, nextSlide);
 				// Store a reference to the next current slide
 				this._currentSlide = nextSlide;
 				// Update the current index

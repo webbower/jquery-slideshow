@@ -154,7 +154,7 @@
 						break;
 				}
 				
-				transitionFunc.call(this, currSlide, nextSlide);
+				transitionFunc.call(this, {slide:currSlide,index:currIndex}, {slide:nextSlide,index:nextIndex});
 				// Store a reference to the next current slide
 				this._currentSlide = nextSlide;
 				// Update the current index
@@ -172,15 +172,43 @@
 		},
 		_transitions: {
 			toggle: function(slide1, slide2) {
-				if(slide1) slide1.hide();
-				slide2.show();
+				if(slide1.slide) slide1.slide.hide();
+				slide2.slide.show();
 			},
 			crossfade: function(slide1, slide2) {
-				if(slide1) slide1.fadeOut('slow');
-				slide2.fadeIn('slow');
+				if(slide1.slide) slide1.slide.fadeOut('slow');
+				slide2.slide.fadeIn('slow');
 			},
-			slideHorz: function(slide1, slide2) {},
-			slideVert: function(slide1, slide2) {}
+			slidehorz: function(slide1, slide2) {
+				if(slide1.index < slide2.index) {
+					slide2.slide.css('left','100%').show();
+					slide1.slide.animate({'left':'-100%'}, 'slow', function() {
+						$(this).hide().css('left', null);
+					});
+					slide2.slide.animate({'left':'0'}, 'slow');
+				} else {
+					slide2.slide.css('left','-100%').show();
+					slide1.slide.animate({'left':'100%'}, 'slow', function() {
+						$(this).hide().css('left', null);
+					});
+					slide2.slide.animate({'left':'0'}, 'slow');
+				}
+			},
+			slidevert: function(slide1, slide2) {
+				if(slide1.index < slide2.index) {
+					slide2.slide.css('top','100%').show();
+					slide1.slide.animate({'top':'-100%'}, 'slow', function() {
+						$(this).hide().css('top', null);
+					});
+					slide2.slide.animate({'top':'0'}, 'slow');
+				} else {
+					slide2.slide.css('top','-100%').show();
+					slide1.slide.animate({'top':'100%'}, 'slow', function() {
+						$(this).hide().css('top', null);
+					});
+					slide2.slide.animate({'top':'0'}, 'slow');
+				}
+			}
 		}
 	});
 
@@ -188,7 +216,7 @@
 		slideshow: function(opts) {
 			opts = $.extend({
 				slideSelector: 'li',
-				transition: 'crossfade',
+				transition: 'slidevert',
 				navStyle: 'thumbnails' // "thumbnails" or "numbers"
 			}, opts);
 			return this.each(function(i, el) {

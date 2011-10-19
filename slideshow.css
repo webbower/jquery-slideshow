@@ -15,6 +15,17 @@
 	display: block;
 }
 
+.slideshow-viewport {
+	overflow: hidden;
+	position: relative;
+}
+
+.slide {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
 .slideshow-controls .disabled {
 	color: #999;
 }

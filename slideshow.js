@@ -24,7 +24,7 @@
 			;
 
 			// Store local references
-			this._slides = root.find(o.slideSelector).hide();
+			this._slides = root.find(o.slideSelector).addClass('slide').hide();
 
 			this.length = this._slides.length;
 

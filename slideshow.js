@@ -126,25 +126,33 @@
 		showSlide: function(idx) {
 			// If we're trying to show a new slide...
 			if(idx !== this._currentIndex) {
-				// Hide the current slide
-				$(this._currentSlide).hide();
-				// Show the new slide and store the current reference to it
-				this._currentSlide = this._slides.eq(idx).show();
+				var
+					currSlide = this._currentSlide,
+					nextSlide = this._slides.eq(idx),
+					currIndex = this._currentIndex,
+					nextIndex = idx
+				;
+				this._transitions[this.options.transition].call(this, currSlide, nextSlide);
+				// Store a reference to the next current slide
+				this._currentSlide = nextSlide;
 				// Update the current index
 				this._currentIndex = idx;
 				
 				// Update the navigation and controls
-				this._prev[this._currentIndex === 0 ? 'addClass' : 'removeClass']('disabled');
-				this._next[this._currentIndex === (this.length - 1) ? 'addClass' : 'removeClass']('disabled');
+				this._prev[nextIndex === 0 ? 'addClass' : 'removeClass']('disabled');
+				this._next[nextIndex === (this.length - 1) ? 'addClass' : 'removeClass']('disabled');
 				
 				this._nav
 					.filter('.current').removeClass('current')
-					.end().eq(this._currentIndex).addClass('current')
+					.end().eq(nextIndex).addClass('current')
 				;
 			}
 		},
 		_transitions: {
-			toggle: function(slide1, slide2) {},
+			toggle: function(slide1, slide2) {
+				if(slide1) slide1.hide();
+				slide2.show();
+			},
 			crossfade: function(slide1, slide2) {},
 			slideHorz: function(slide1, slide2) {},
 			slideVert: function(slide1, slide2) {}

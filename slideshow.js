@@ -153,7 +153,10 @@
 				if(slide1) slide1.hide();
 				slide2.show();
 			},
-			crossfade: function(slide1, slide2) {},
+			crossfade: function(slide1, slide2) {
+				if(slide1) slide1.fadeOut('slow');
+				slide2.fadeIn('slow');
+			},
 			slideHorz: function(slide1, slide2) {},
 			slideVert: function(slide1, slide2) {}
 		}
@@ -163,7 +166,7 @@
 		slideshow: function(opts) {
 			opts = $.extend({
 				slideSelector: 'li',
-				transition: 'toggle',
+				transition: 'crossfade',
 				navStyle: 'thumbnails' // "thumbnails" or "numbers"
 			}, opts);
 			return this.each(function(i, el) {

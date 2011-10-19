@@ -15,19 +15,21 @@
 
 			var
 				self = this,
-				$root = $(self.element),
+				root = $(self.element),
 				o = self.options,
 				vpW = vpH = 0
 			;
 
-			this._slides = $root.find(o.slideSelector).hide();
+			// Store local references
+			this._slides = root.find(o.slideSelector).hide();
 
+			this.length = this._slides.length;
+
+			// Determine size of the viewport based on the biggest width and height of images
 			this._slides.find('img').each(function(i, el) {
 				vpW = Math.max(vpW, el.width);
 				vpH = Math.max(vpH, el.height);
 			});
-			
-			this.length = this._slides.length;
 			
 			// Build the UI
 			self._addViewport(vpW, vpH);
@@ -35,7 +37,7 @@
 			self._addIndexNav();
 
 			// Hook up all the functionality
-			$root
+			root
 				.bind('nextSlide', function(ev) {
 					console.log("Show Next Slide");  // TODO: Remove for Production
 					self.nextSlide();
@@ -49,16 +51,13 @@
 				})
 				.delegate('.prev', 'click', function(ev) {
 					ev.preventDefault();
-					console.log("Clicked Prev");  // TODO: Remove for Production
 					$(this).trigger('prevSlide');
 				})
 				.delegate('.next', 'click', function(ev) {
 					ev.preventDefault();
-					console.log("Clicked Next");  // TODO: Remove for Production
 					$(this).trigger('nextSlide');
 				})
 				.delegate('.slideshow-nav a', 'click', function(ev) {
-					console.log("Clicked Nav link");  // TODO: Remove for Production
 					ev.preventDefault();
 					var
 						$parent = $(this).parent(),
@@ -68,26 +67,18 @@
 					$parent.trigger('showSlide', $navs.index($parent));
 				})
 				.trigger('showSlide', self._currentIndex)
+				.addClass('slideshow-active')
 			;
 			
-			$root.addClass('slideshow-active');
-			console.log(this);
 		},
 		_addViewport: function(w, h) {
-			var
-				root = $(this.element)
-			;
-			
-			root
+			$(this.element)
 				.children('*:first').wrap('<div class="slideshow-viewport" style="width:'+w+'px; height:'+h+'px;"/>')
 			;
 		},
 		_addIndexNav: function() {
-			console.log("Build Index Nav");  // TODO: Remove for Production
 			var
-				self = this,
-				$root = $(this.element),
-				slideCount = self._slides.length,
+				slideCount = this.length,
 				links = []
 			;
 			
@@ -95,18 +86,19 @@
 				links.push('<li><a href="#">'+(slideCount+1)+'</a></li>');
 			}
 			
-			$('<div class="slideshow-nav"><ul>' + links.reverse().join('') + '</ul></div>').appendTo($root);
+			$('<div class="slideshow-nav"><ul>' + links.reverse().join('') + '</ul></div>').appendTo($(this.element));
 		},
 		_addPrevNext: function() {
-			console.log("Build Prev/Next");  // TODO: Remove for Production
 			var
 				self = this,
-				$root = $(this.element)
+				root = $(this.element)
 			;
 			
-			$root.append('<div class="slideshow-controls"><a class="prev" href="#">Prev</a><a class="next" href="#">Next</a></div>');
+			root.append('<div class="slideshow-controls"><a class="prev" href="#">Prev</a><a class="next" href="#">Next</a></div>');
 		},
-		_getSlideIndex: function() {},
+		_getSlideIndex: function() {
+			
+		},
 		nextSlide: function() {
 			var
 				next = this._currentIndex + 1;
@@ -120,10 +112,9 @@
 			if(prev >= 0) this.showSlide(prev);
 		},
 		showSlide: function(idx) {
-			var self = this;
-			$(self._currentSlide).hide();
-			self._currentSlide = self._slides.eq(idx).show();
-			self._currentIndex = idx;
+			$(this._currentSlide).hide();
+			this._currentSlide = this._slides.eq(idx).show();
+			this._currentIndex = idx;
 		},
 		_transitions: {
 			crossfade: function(slide1, slide2) {},
@@ -140,7 +131,6 @@
 				navStyle: 'thumbnails' // "thumbnails" or "numbers"
 			}, opts);
 			return this.each(function(i, el) {
-				console.log("slideshow init on ", el, opts);  // TODO: Remove for Production
 				Slideshow.init(el, opts);
 			});
 		}

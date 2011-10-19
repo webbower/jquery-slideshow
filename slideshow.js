@@ -11,16 +11,26 @@
 		init: function(el, opts) {
 			this.element = el;
 			$.extend(this.options, opts);
+
 			var
 				self = this,
 				$root = $(self.element),
-				o = self.options
+				o = self.options,
+				vpW = vpH = 0
 			;
+
 			this._slides = $root.find(o.slideSelector).hide();
+
+			this._slides.find('img').each(function(i, el) {
+				vpW = Math.max(vpW, el.width);
+				vpH = Math.max(vpH, el.height);
+			});
+			
 			// Build the UI
+			self._addViewport(vpW, vpH);
 			self._addPrevNext();
 			self._addIndexNav();
-			
+
 			// Hook up all the functionality
 			$root
 				.bind('nextSlide', function(ev) {
@@ -58,7 +68,15 @@
 			$root.addClass('slideshow-active');
 			console.log(this);
 		},
-		buildUI: function() {},
+		_addViewport: function(w, h) {
+			var
+				root = $(this.element)
+			;
+			
+			root
+				.children('*:first').wrap('<div class="slideshow-viewport" style="width:'+w+'px; height:'+h+'px;"/>')
+			;
+		},
 		_addIndexNav: function() {
 			console.log("Build Index Nav");  // TODO: Remove for Production
 			var
@@ -72,7 +90,7 @@
 				links.push('<li><a href="#">'+(slideCount+1)+'</a></li>');
 			}
 			
-			$('<ul class="nav">' + links.reverse().join('') + '</ul>').appendTo($root);
+			$('<div class="slideshow-nav"><ul>' + links.reverse().join('') + '</ul></div>').appendTo($root);
 		},
 		_addPrevNext: function() {
 			console.log("Build Prev/Next");  // TODO: Remove for Production
@@ -81,7 +99,7 @@
 				$root = $(this.element)
 			;
 			
-			$root.append('<div class="controls"><a class="prev" href="#">Prev</a><a class="next" href="#">Next</a></div>');
+			$root.append('<div class="slideshow-controls"><a class="prev" href="#">Prev</a><a class="next" href="#">Next</a></div>');
 		},
 		_getSlideIndex: function() {},
 		nextSlide: function() {},

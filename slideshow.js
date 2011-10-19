@@ -144,6 +144,7 @@
 			}
 		},
 		_transitions: {
+			toggle: function(slide1, slide2) {},
 			crossfade: function(slide1, slide2) {},
 			slideHorz: function(slide1, slide2) {},
 			slideVert: function(slide1, slide2) {}
@@ -154,7 +155,7 @@
 		slideshow: function(opts) {
 			opts = $.extend({
 				slideSelector: 'li',
-				transition: 'crossfade',
+				transition: 'toggle',
 				navStyle: 'thumbnails' // "thumbnails" or "numbers"
 			}, opts);
 			return this.each(function(i, el) {

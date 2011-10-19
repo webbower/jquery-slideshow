@@ -53,7 +53,12 @@
 					self.nextSlide();
 				})
 				.bind('showSlide', function(ev, idx) {
-					self.showSlide(idx);
+					var fx = true;
+					if(idx.constructor === Object) {
+						fx = idx.hasOwnProperty('fx') ? idx.fx : true;
+						idx = idx.index;
+					}
+					self.showSlide(idx, fx);
 				})
 				.delegate('.prev', 'click', function(ev) {
 					ev.preventDefault();
@@ -78,7 +83,7 @@
 
 					$parent.trigger('showSlide', $navs.index($parent));
 				})
-				.trigger('showSlide', 0)
+				.trigger('showSlide', {index:0,fx:false})
 				.addClass('slideshow-active')
 			;
 			
@@ -123,7 +128,7 @@
 			;
 			if(prev >= 0) this.showSlide(prev);
 		},
-		showSlide: function(idx) {
+		showSlide: function(idx, fx) {
 			// If we're trying to show a new slide...
 			if(idx !== this._currentIndex) {
 				var
@@ -131,8 +136,24 @@
 					nextSlide = this._slides.eq(idx),
 					currIndex = this._currentIndex,
 					nextIndex = idx,
-					transitionFunc = (typeof this.options.transition === 'string' ? this._transitions[this.options.transition] : this.options.transition)
+					transitionFunc
 				;
+				
+				switch(true) {
+					case fx === false:
+						transitionFunc = this._transitions.toggle;
+						break;
+
+					case (typeof this.options.transition === 'string' && !!this._transitions[this.options.transition]):
+						transitionFunc = this._transitions[this.options.transition];
+						break;
+
+					case $.isFunction(this.options.transition):
+					default:
+						transitionFunc = this.options.transition;
+						break;
+				}
+				
 				transitionFunc.call(this, currSlide, nextSlide);
 				// Store a reference to the next current slide
 				this._currentSlide = nextSlide;

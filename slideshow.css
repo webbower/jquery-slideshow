@@ -1,17 +1,17 @@
-.slideshow {}
+.slideshow-active {}
 
-.slideshow ul {
+.slideshow-active ul {
 	margin: 0;
 	padding: 0;
 }
 
-.slideshow li {
+.slideshow-active li {
 	margin: 0;
 	padding: 0;
 	display: block;
 }
 
-.slideshow img {
+.slideshow-active img {
 	display: block;
 }
 

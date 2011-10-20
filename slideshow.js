@@ -1,5 +1,6 @@
 // TODO Add ability for nav to slide if nav is longer than can be shown in module
 // TODO Might need to add prev/next controls for nav :-/
+// TODO Implement ability to have multiple instances of this running
 ;(function($) {
     // Pre ready() code goes here
 	if(!window.Slideshow) Slideshow = {};
@@ -62,13 +63,13 @@
 
 			// Hook up all the functionality
 			root
-				.bind('prevSlide', function(ev) {
+				.bind('prev.slideshow', function(ev) {
 					self.prevSlide();
-				})
-				.bind('nextSlide', function(ev) {
+				})         
+				.bind('next.slideshow', function(ev) {
 					self.nextSlide();
-				})
-				.bind('showSlide', function(ev, idx) {
+				})         
+				.bind('show.slideshow', function(ev, idx) {
 					var fx = true;
 					if(idx.constructor === Object) {
 						fx = idx.hasOwnProperty('fx') ? idx.fx : true;
@@ -76,27 +77,27 @@
 					}
 					self.showSlide(idx, fx);
 				})
-				.bind('stopAutoplay', function(ev) {
+				.bind('stop.slideshow', function(ev) {
 					// TODO Implement ability to stop autoplay
 				})
-				.bind('startAutoplay', function(ev) {
+				.bind('start.slideshow', function(ev) {
 					// TODO Implement ability to start/resume autoplay
 				})
-				.bind('destroy', function(ev) {
-					// TODO Add destroy cleanup functionality
+				.bind('destroy.slideshow', function(ev) {
+					self.destroy();
 				})
 				.delegate('.prev', 'click', function(ev) {
 					ev.preventDefault();
 					var $el = $(this);
 					if(!$el.hasClass('disabled')) {
-						$el.trigger('prevSlide');
+						$el.trigger('prev');
 					}
 				})
 				.delegate('.next', 'click', function(ev) {
 					ev.preventDefault();
 					var $el = $(this);
 					if(!$el.hasClass('disabled')) {
-						$el.trigger('nextSlide');
+						$el.trigger('next');
 					}
 				})
 				.delegate('.slideshow-nav a', 'click', function(ev) {
@@ -106,12 +107,12 @@
 						$navs = $parent.siblings('li').andSelf()
 					;
 
-					$parent.trigger('showSlide', $navs.index($parent));
+					$parent.trigger('show', $navs.index($parent));
 				})
 				.delegate('.slideshow-autoplay', 'click', function(ev) {
 					// TODO Implement handler for clicking on the autoplay control
 				})
-				.trigger('showSlide', {index:0,fx:false})
+				.trigger('show', {index:0,fx:false})
 				.addClass('slideshow-active')
 			;
 			
@@ -146,6 +147,34 @@
 		},
 		_getSlideIndex: function() {
 			
+		},
+		destroy: function() {
+			var
+				root = $(this.element)
+			;
+
+			this._slides.removeClass('slide').show();
+			$.extend(this, {
+				_currentSlide: null,
+				_currentIndex: null,
+				_slides: null,
+				_nav: null,
+				_prev: null,
+				_next: null,
+				_autoplayCount: null,
+				length: 0,
+				element: null
+			});
+			
+			root
+				.unbind('.slideshow')
+				.find('.slideshow-nav').remove()
+				.end().find('.slideshow-controls').remove()
+				.end().find('.slideshow-viewport').children('*:first').unwrap()
+				.removeClass('slideshow-active')
+			;
+			
+			delete this;
 		},
 		nextSlide: function() {
 			var

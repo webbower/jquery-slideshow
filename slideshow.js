@@ -21,6 +21,7 @@
 			autoplayDelay: null, // TODO Implement autoplayDelay. Delay between each transition
 			autoplayStop: 'interaction', // TODO Implement autoplayStop. 'interaction' (stop when user interacts with controls) or 'manual' (creates a button to stop autoplay)
 			autoplayControls: false, // Whether to show autoplay controls. false (no controls), 'pause' (pause only), 'playpause' (control to start and stop)
+			easing: 'swing',
 			slideSelector: 'li',
 			transition: 'toggle',
 			navStyle: 'numbers', // "thumbnails" or "numbers"
@@ -182,7 +183,7 @@
 						break;
 				}
 				
-				transitionFunc.call(this, {slide:currSlide,index:currIndex}, {slide:nextSlide,index:nextIndex});
+				transitionFunc.call(this, {slide:currSlide,index:currIndex}, {slide:nextSlide,index:nextIndex}, this.options);
 				// Store a reference to the next current slide
 				this._currentSlide = nextSlide;
 				// Update the current index
@@ -199,42 +200,42 @@
 			}
 		},
 		_transitions: {
-			toggle: function(slide1, slide2) {
+			toggle: function(slide1, slide2, options) {
 				if(slide1.slide) slide1.slide.hide();
 				slide2.slide.show();
 			},
-			crossfade: function(slide1, slide2) {
-				if(slide1.slide) slide1.slide.fadeOut('slow');
-				slide2.slide.fadeIn('slow');
+			crossfade: function(slide1, slide2, options) {
+				if(slide1.slide) slide1.slide.fadeOut('slow', options.easing);
+				slide2.slide.fadeIn('slow', options.easing);
 			},
-			slidehorz: function(slide1, slide2) {
+			slidehorz: function(slide1, slide2, options) {
 				if(slide1.index < slide2.index) {
 					slide2.slide.css('left','100%').show();
-					slide1.slide.animate({'left':'-100%'}, 'slow', function() {
+					slide1.slide.animate({'left':'-100%'}, 'slow', options.easing, function() {
 						$(this).hide().css('left', null);
 					});
-					slide2.slide.animate({'left':'0'}, 'slow');
+					slide2.slide.animate({'left':'0'}, 'slow', options.easing);
 				} else {
 					slide2.slide.css('left','-100%').show();
-					slide1.slide.animate({'left':'100%'}, 'slow', function() {
+					slide1.slide.animate({'left':'100%'}, 'slow', options.easing, function() {
 						$(this).hide().css('left', null);
 					});
-					slide2.slide.animate({'left':'0'}, 'slow');
+					slide2.slide.animate({'left':'0'}, 'slow', options.easing);
 				}
 			},
-			slidevert: function(slide1, slide2) {
+			slidevert: function(slide1, slide2, options) {
 				if(slide1.index < slide2.index) {
 					slide2.slide.css('top','100%').show();
-					slide1.slide.animate({'top':'-100%'}, 'slow', function() {
+					slide1.slide.animate({'top':'-100%'}, 'slow', options.easing, function() {
 						$(this).hide().css('top', null);
 					});
-					slide2.slide.animate({'top':'0'}, 'slow');
+					slide2.slide.animate({'top':'0'}, 'slow', options.easing);
 				} else {
 					slide2.slide.css('top','-100%').show();
-					slide1.slide.animate({'top':'100%'}, 'slow', function() {
+					slide1.slide.animate({'top':'100%'}, 'slow', options.easing, function() {
 						$(this).hide().css('top', null);
 					});
-					slide2.slide.animate({'top':'0'}, 'slow');
+					slide2.slide.animate({'top':'0'}, 'slow', options.easing);
 				}
 			}
 		}

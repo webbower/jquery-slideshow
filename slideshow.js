@@ -82,6 +82,9 @@
 				.bind('startAutoplay', function(ev) {
 					// TODO Implement ability to start/resume autoplay
 				})
+				.bind('destroy', function(ev) {
+					// TODO Add destroy cleanup functionality
+				})
 				.delegate('.prev', 'click', function(ev) {
 					ev.preventDefault();
 					var $el = $(this);

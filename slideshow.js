@@ -24,6 +24,7 @@
 			easing: 'swing',
 			slideSelector: 'li',
 			transition: 'toggle',
+			transitionSpeed: 'slow',
 			navStyle: 'numbers', // "thumbnails" or "numbers"
 			currentClass: 'current',
 			disabledClass: 'disabled'
@@ -205,37 +206,37 @@
 				slide2.slide.show();
 			},
 			crossfade: function(slide1, slide2, options) {
-				if(slide1.slide) slide1.slide.fadeOut('slow', options.easing);
-				slide2.slide.fadeIn('slow', options.easing);
+				if(slide1.slide) slide1.slide.fadeOut(options.transitionSpeed, options.easing);
+				slide2.slide.fadeIn(options.transitionSpeed, options.easing);
 			},
 			slidehorz: function(slide1, slide2, options) {
 				if(slide1.index < slide2.index) {
 					slide2.slide.css('left','100%').show();
-					slide1.slide.animate({'left':'-100%'}, 'slow', options.easing, function() {
+					slide1.slide.animate({'left':'-100%'}, options.transitionSpeed, options.easing, function() {
 						$(this).hide().css('left', null);
 					});
-					slide2.slide.animate({'left':'0'}, 'slow', options.easing);
+					slide2.slide.animate({'left':'0'}, options.transitionSpeed, options.easing);
 				} else {
 					slide2.slide.css('left','-100%').show();
-					slide1.slide.animate({'left':'100%'}, 'slow', options.easing, function() {
+					slide1.slide.animate({'left':'100%'}, options.transitionSpeed, options.easing, function() {
 						$(this).hide().css('left', null);
 					});
-					slide2.slide.animate({'left':'0'}, 'slow', options.easing);
+					slide2.slide.animate({'left':'0'}, options.transitionSpeed, options.easing);
 				}
 			},
 			slidevert: function(slide1, slide2, options) {
 				if(slide1.index < slide2.index) {
 					slide2.slide.css('top','100%').show();
-					slide1.slide.animate({'top':'-100%'}, 'slow', options.easing, function() {
+					slide1.slide.animate({'top':'-100%'}, options.transitionSpeed, options.easing, function() {
 						$(this).hide().css('top', null);
 					});
-					slide2.slide.animate({'top':'0'}, 'slow', options.easing);
+					slide2.slide.animate({'top':'0'}, options.transitionSpeed, options.easing);
 				} else {
 					slide2.slide.css('top','-100%').show();
-					slide1.slide.animate({'top':'100%'}, 'slow', options.easing, function() {
+					slide1.slide.animate({'top':'100%'}, options.transitionSpeed, options.easing, function() {
 						$(this).hide().css('top', null);
 					});
-					slide2.slide.animate({'top':'0'}, 'slow', options.easing);
+					slide2.slide.animate({'top':'0'}, options.transitionSpeed, options.easing);
 				}
 			}
 		}

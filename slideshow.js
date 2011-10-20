@@ -25,7 +25,7 @@
 			slideSelector: 'li',
 			transition: 'toggle',
 			transitionSpeed: 'slow',
-			navStyle: 'numbers', // "thumbnails" or "numbers"
+			navStyle: 'numbers', // TODO Implement thumbnail nav style. "thumbnails" or "numbers"
 			currentClass: 'current',
 			disabledClass: 'disabled'
 		},

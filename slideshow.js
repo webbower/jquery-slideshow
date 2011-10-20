@@ -33,7 +33,7 @@
 			var
 				self = this,
 				root = $(self.element),
-				o = $.extend(this.options, opts, root.data()),
+				o = $.extend(this.options, (opts || {}), root.data()),
 				vpW = vpH = 0
 			;
 
@@ -147,12 +147,14 @@
 				next = this._currentIndex + 1;
 			;
 			if(next < this.length) this.showSlide(next);
+			else this.showSlide(0);
 		},
 		prevSlide: function() {
 			var
 				prev = this._currentIndex - 1;
 			;
 			if(prev >= 0) this.showSlide(prev);
+			else this.showSlide(this.length - 1);
 		},
 		showSlide: function(idx, fx) {
 			// If we're trying to show a new slide...
@@ -187,8 +189,8 @@
 				this._currentIndex = idx;
 				
 				// Update the navigation and controls
-				this._prev[nextIndex === 0 ? 'addClass' : 'removeClass'](this.options.disabledClass);
-				this._next[nextIndex === (this.length - 1) ? 'addClass' : 'removeClass'](this.options.disabledClass);
+				this._prev[!this.options.loop && nextIndex === 0 ? 'addClass' : 'removeClass'](this.options.disabledClass);
+				this._next[!this.options.loop && nextIndex === (this.length - 1) ? 'addClass' : 'removeClass'](this.options.disabledClass);
 				
 				this._nav
 					.filter('.current').removeClass(this.options.currentClass)
@@ -249,8 +251,6 @@
     $(function() {
         $(document.documentElement).removeClass('no-js').addClass('js');
 
-		$('.slideshow').slideshow({
-			transition: 'slidevert'
-		});
+		$('.slideshow').slideshow();
     });
 })(jQuery);

@@ -1,3 +1,5 @@
+// TODO Add ability for nav to slide if nav is longer than can be shown in module
+// TODO Might need to add prev/next controls for nav :-/
 ;(function($) {
     // Pre ready() code goes here
 	if(!window.Slideshow) Slideshow = {};
@@ -9,9 +11,16 @@
 		_nav: null,
 		_prev: null,
 		_next: null,
+		_autoplayCount: null,
 		length: 0,
 		element: null,
 		options: {
+			loop: false, // TODO Implement looping functionality. Affects controls and autoplay. Set to true if autoplay enabled
+			autoplay: false, // TODO Implement autoplay functionality. Implies loop: true
+			autoplayCount: null, // TODO Implement autoplayCount. 0 = no limit, 1+ = repeat n times
+			autoplayDelay: null, // TODO Implement autoplayDelay. Delay between each transition
+			autoplayStop: 'interaction', // TODO Implement autoplayStop. 'interaction' (stop when user interacts with controls) or 'manual' (creates a button to stop autoplay)
+			autoplayControls: false, // Whether to show autoplay controls. false (no controls), 'pause' (pause only), 'playpause' (control to start and stop)
 			slideSelector: 'li',
 			transition: 'toggle',
 			navStyle: 'numbers', // "thumbnails" or "numbers"
@@ -65,6 +74,12 @@
 					}
 					self.showSlide(idx, fx);
 				})
+				.bind('stopAutoplay', function(ev) {
+					// TODO Implement ability to stop autoplay
+				})
+				.bind('startAutoplay', function(ev) {
+					// TODO Implement ability to start/resume autoplay
+				})
 				.delegate('.prev', 'click', function(ev) {
 					ev.preventDefault();
 					var $el = $(this);
@@ -87,6 +102,9 @@
 					;
 
 					$parent.trigger('showSlide', $navs.index($parent));
+				})
+				.delegate('.slideshow-autoplay', 'click', function(ev) {
+					// TODO Implement handler for clicking on the autoplay control
 				})
 				.trigger('showSlide', {index:0,fx:false})
 				.addClass('slideshow-active')
@@ -117,6 +135,9 @@
 			;
 			
 			root.append('<div class="slideshow-controls"><a class="prev" href="#">Prev</a><a class="next" href="#">Next</a></div>');
+		},
+		_addAutoplayControls: function() {
+			// TODO Inject autoplay control HTML
 		},
 		_getSlideIndex: function() {
 			

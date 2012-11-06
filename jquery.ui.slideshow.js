@@ -329,7 +329,7 @@
 			}
 		},
 		slidevert: function(slide1, slide2, action, options) {
-			if(slide1.index < slide2.index) {
+			if(action === 'next' || (action === 'direct' && slide1.index < slide2.index)) {
 				slide2.slide.css('top','100%').show();
 				slide1.slide.animate({'top':'-100%'}, options.transitionSpeed, options.easing, function() {
 					$(this).hide().css('top', null);

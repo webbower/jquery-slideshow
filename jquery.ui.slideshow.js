@@ -214,7 +214,7 @@
 			;
 			
 			// If we're trying to show a new slide...
-			if($widget.hasClass('ui-state-transitioning') || index !== self._currentIndex) {
+			if(!$widget.hasClass('ui-state-transitioning') || index !== self._currentIndex) {
 				var
 					currSlide = self._currentSlide,
 					nextSlide = self._slides.eq(index),
@@ -314,34 +314,34 @@
 			slide2.slide.fadeIn(options.transitionSpeed, options.easing);
 		},
 		slidehorz: function(slide1, slide2, action, options) {
+			var slide1End, slide2Start;
 			if(action === 'next' || (action === 'direct' && slide1.index < slide2.index)) {
-				slide2.slide.css('left','100%').show();
-				slide1.slide.animate({'left':'-100%'}, options.transitionSpeed, options.easing, function() {
-					$(this).hide().css('left', null);
-				});
-				slide2.slide.animate({'left':'0'}, options.transitionSpeed, options.easing);
+				slide1End = '-100%';
+				slide2Start = '100%';
 			} else {
-				slide2.slide.css('left','-100%').show();
-				slide1.slide.animate({'left':'100%'}, options.transitionSpeed, options.easing, function() {
-					$(this).hide().css('left', null);
-				});
-				slide2.slide.animate({'left':'0'}, options.transitionSpeed, options.easing);
+				slide1End = '100%';
+				slide2Start = '-100%';
 			}
+			slide2.slide.css('left',slide2Start).show();
+			slide1.slide.animate({'left':slide1End}, options.transitionSpeed, options.easing, function() {
+				$(this).hide().css('left', null);
+			});
+			slide2.slide.animate({'left':'0'}, options.transitionSpeed, options.easing);
 		},
 		slidevert: function(slide1, slide2, action, options) {
+			var slide1End, slide2Start;
 			if(action === 'next' || (action === 'direct' && slide1.index < slide2.index)) {
-				slide2.slide.css('top','100%').show();
-				slide1.slide.animate({'top':'-100%'}, options.transitionSpeed, options.easing, function() {
-					$(this).hide().css('top', null);
-				});
-				slide2.slide.animate({'top':'0'}, options.transitionSpeed, options.easing);
+				slide1End = '-100%';
+				slide2Start = '100%';
 			} else {
-				slide2.slide.css('top','-100%').show();
-				slide1.slide.animate({'top':'100%'}, options.transitionSpeed, options.easing, function() {
-					$(this).hide().css('top', null);
-				});
-				slide2.slide.animate({'top':'0'}, options.transitionSpeed, options.easing);
+				slide1End = '100%';
+				slide2Start = '-100%';
 			}
+			slide2.slide.css('top', slide2Start).show();
+			slide1.slide.animate({'top':slide1End}, options.transitionSpeed, options.easing, function() {
+				$(this).hide().css('top', null);
+			});
+			slide2.slide.animate({'top':'0'}, options.transitionSpeed, options.easing);
 		}
 	};
 })(jQuery);

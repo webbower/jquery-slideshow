@@ -1,12 +1,16 @@
 /*
-* jQuery Slideshow Widget
-*
-* Depends:
-*   jquery.js 1.8
-*   jquery.ui.core.js 1.8.17
-*   jquery.ui.widget.js 1.8.17
-*/
-;  (function ($) {
+ * jQuery Slideshow Widget
+ *
+ * Copyright (c) 2012 Matt Bower
+ * Licensed under the none license.
+ *
+ * Depends:
+ *   jquery.js 1.8
+ *   jquery.ui.core.js 1.8.17
+ *   jquery.ui.widget.js 1.8.17
+ */
+
+; (function ($) {
 	'use strict';
 
 	var
@@ -197,13 +201,17 @@
 			;
 
 			// Update the navigation and controls
-			self._prev.toggleClass('ui-state-disabled', !o.loop && index === 0);
-			self._next.toggleClass('ui-state-disabled', !o.loop && index === (self.length() - 1));
+			if(o.showPrevNext) {
+				self._prev.toggleClass('ui-state-disabled', !o.loop && index === 0);
+				self._next.toggleClass('ui-state-disabled', !o.loop && index === (self.length() - 1));
+			}
 				
-			self._nav
-				.filter('.ui-state-active').removeClass('ui-state-active')
-				.end().eq(index).addClass('ui-state-active')
-			;
+			if(o.showNav) {
+				self._nav
+					.filter('.ui-state-active').removeClass('ui-state-active')
+					.end().eq(index).addClass('ui-state-active')
+				;
+			}
 		},
 
 		show: function(index, action, fx) {

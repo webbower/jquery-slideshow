@@ -1,0 +1,29 @@
+{
+  "name": "jqueryui-slideshow",
+  "title": "jQuery UI Slideshow Widget",
+  "description": "A basic slideshow widget for jQuery UI",
+  "version": "1.0.0",
+  "homepage": "",
+  "author": {
+    "name": "Matt Bower",
+    "email": "matt@webbower.com",
+    "url": "www.webbower.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "none"
+  },
+  "bugs": {
+    "url": ""
+  },
+  "licenses": [
+    {
+      "type": "none",
+      "url": "/blob/master/LICENSE-none"
+    }
+  ],
+  "dependencies": {
+    "jquery": "1.7"
+  },
+  "keywords": []
+}
